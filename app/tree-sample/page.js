@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import treeData from './treemenu-data'
 import {Tree} from "antd";
+import {findLargestSumPair, arr1, arr2} from "./max2numbers";
 
 // -----------------
 // React Component
@@ -24,6 +25,12 @@ export default function TreeDemo() {
       checkStrictly
       treeData={antdTreeData}
     />
+
+    <h1>Largest Sum Pair: {arr1.map(item => item + ", ")}</h1>
+    <h3>{findLargestSumPair(arr1).map(item => item + ", ")}</h3>
+
+    <h1>Largest Sum Pair: {arr2.map(item => item + ", ")}</h1>
+    <h3>{findLargestSumPair(arr2).map(item => item + ", ")}</h3>
   </>
 }
 
