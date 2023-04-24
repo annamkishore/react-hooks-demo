@@ -1,3 +1,4 @@
+// feature #3(next): title
 export const metadata = {title: 'Tree Demo'}
 
 export default function RootLayout({children}) {
