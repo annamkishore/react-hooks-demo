@@ -1,6 +1,6 @@
 // feature #4(next): "use client" to render in browser
 "use client"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 // feature #5(next): export default is mandatory, without that page will not render
 export default function LifeCycleDemo() {
@@ -9,15 +9,21 @@ export default function LifeCycleDemo() {
   let [count1, setCount1] = useState(0)
   let [count2, setCount2] = useState(0)
 
-  // feature #2(--react): lifecycle
+  // feature #3(--react): useRef
+  let inputRef = useRef()                 // works as id of an element
+  let dataRef = useRef(11)        // works as class variable (in Function Component)
+
+  // feature #2(--react): lifecycle using useEffect
   // ------on component mount/update
   useEffect(() => {
+    dataRef.current += 1
     console.log("mount 1")
     return () => console.log("unmount 1")
   })
 
   // ------on component mount
   useEffect(() => {
+    inputRef.current.focus()
     console.log("mount 2")
     return () => console.log("unmount 2")
   }, [])
@@ -46,5 +52,14 @@ export default function LifeCycleDemo() {
       <button onClick={() => setCount2(count2 + 1)}><h1>+</h1></button>
       <button onClick={() => setCount2(count2 - 1)}><h1>-</h1></button>
     </h2>
+    <Greet name={"Krishna.."} />
+    <input ref={inputRef} />
+    <div>another ref usage, {dataRef.current}</div>
+  </>
+}
+
+function Greet({name}) {
+  return <>
+    <h1>Namaste {name}</h1>
   </>
 }
