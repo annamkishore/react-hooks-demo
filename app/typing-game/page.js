@@ -9,12 +9,9 @@ import {randomInt} from "next/dist/shared/lib/bloom-filter/utils";
 // 3. clear interval
 
 export default function Game() {
-
   let [letters, setLetters] = useState([])
   let lettersInterval = useRef(0)
   let divRef = useRef()
-
-  let width = innerWidth
 
   useEffect(() => {
     lettersInterval.current = setInterval(() => {
@@ -27,30 +24,31 @@ export default function Game() {
   }, [])
 
   useEffect(()=>{
-    if (letters.length >= 10) {
+    if (letters.filter(item=>item.display).length >= 10) {
       clearInterval(lettersInterval.current)
     }
   }, [letters])
 
   let clearLetter = (event) => {
     console.log('key down')
-    let index = letters.findIndex(item => item.val === event.key)
+    let index = letters.findIndex(item => item.val === event.key && item.display)
     if(index > -1) {
-      letters.splice(index, 1)
+      letters[index].display = false
       setLetters([...letters])
     }
   }
 
   return <div style={{width: "100%", height: "100%"}} ref={divRef} onKeyDown={clearLetter} tabIndex={0} onClick={()=>console.log("clicked")}>
-    {letters.map((item, index) => <MyLetter key={index} {...item}/>)}
+    {letters.map((item, index) => item.display && <MyLetter key={index} {...item}/>)}
   </div>
 }
 
 function generateLetter() {
   return {
     val: String.fromCharCode(0x41 + Math.floor(Math.random() * 26)),
+    position: Math.floor(Math.random() * (innerWidth - 100)),
     speed: 100,
     jump: 10,
-    position: Math.floor(Math.random() * (innerWidth - 100))
+    display: true
   }
 }
