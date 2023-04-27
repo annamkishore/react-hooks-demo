@@ -43,12 +43,16 @@ export default function Game() {
   </div>
 }
 
+function random(max) {
+  return Math.floor(Math.random() * max)
+}
+
 function generateLetter() {
   return {
-    val: String.fromCharCode(0x41 + Math.floor(Math.random() * 26)),
-    position: Math.floor(Math.random() * (innerWidth - 100)),
-    speed: 100,
-    jump: 10,
+    val: String.fromCharCode(0x41 + random(26)),
+    position: random(innerWidth - 100),
+    speed: 100 + random(100),
+    jump: 10 + random(10),
     display: true
   }
 }
