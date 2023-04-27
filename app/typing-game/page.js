@@ -41,7 +41,7 @@ export default function Game() {
     }
   }
 
-  return <div ref={divRef} onKeyDown={clearLetter} tabIndex={0}>
+  return <div style={{width: "100%", height: "100%"}} ref={divRef} onKeyDown={clearLetter} tabIndex={0} onClick={()=>console.log("clicked")}>
     {letters.map((item, index) => <MyLetter key={index} {...item}/>)}
   </div>
 }
