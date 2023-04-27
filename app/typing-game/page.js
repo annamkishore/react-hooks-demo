@@ -12,6 +12,7 @@ export default function Game() {
 
   let [letters, setLetters] = useState([])
   let lettersInterval = useRef(0)
+  let divRef = useRef()
 
   let width = innerWidth
 
@@ -22,27 +23,26 @@ export default function Game() {
       })
     }, 1000)
     console.log("interval: ", lettersInterval.current)
+    divRef.current.focus()
   }, [])
 
   useEffect(()=>{
     if (letters.length >= 10) {
-      console.log("clearing interval", lettersInterval.current)
       clearInterval(lettersInterval.current)
     }
   }, [letters])
 
   let clearLetter = (event) => {
     console.log('key down')
-    if(letters.find(item => item.val === event.key)) {
-      console.log(event.key)
+    let index = letters.findIndex(item => item.val === event.key)
+    if(index > -1) {
+      letters.splice(index, 1)
+      setLetters([...letters])
     }
   }
 
-  return <div onKeyDown={clearLetter} tabIndex={0}>
+  return <div ref={divRef} onKeyDown={clearLetter} tabIndex={0}>
     {letters.map((item, index) => <MyLetter key={index} {...item}/>)}
-    {/*<Key {...generateLetter()}/>*/}
-    {/*<Key {...generateLetter()}/>*/}
-    {/*<Key {...generateLetter()}/>*/}
   </div>
 }
 
