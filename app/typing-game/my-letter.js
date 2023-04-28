@@ -2,9 +2,9 @@
 import {useEffect, useRef, useState} from 'react'
 
 let count = 0
-export default function MyLetter({val, position = 100, speed = 100, jump = 10}) {
-  let [left, setLeft] = useState(position)
-  let [top, setTop] = useState(0)
+export default function MyLetter({val, col = 100, row = 0, speed = 100, jump = 10, updateMissFn}) {
+  let [left, setLeft] = useState(col)
+  let [top, setTop] = useState(row)
   let interval = useRef(0)
 
   let lastLine = innerHeight - 100
@@ -18,6 +18,7 @@ export default function MyLetter({val, position = 100, speed = 100, jump = 10}) 
   useEffect(() => {
     if(top > lastLine) {
       clearInterval(interval.current)
+      updateMissFn(1)
     }
   }, [top])
 
