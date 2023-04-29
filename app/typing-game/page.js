@@ -7,20 +7,46 @@ import {useEffect, useRef, useState} from "react";
 // 2. get screen height
 // 3. clear interval
 
+/**
+ *
+ * issues
+ *  1, Hits increasing for missed letters
+ *  2, Gameover to have box
+ *  3, stop falling letters after gameover (use reducer)
+ */
+
 export default function Game() {
+
+  // todo: pack ref variables for more clarity
+
   let [letters, setLetters] = useState([])
   let [missCount, setMissCount] = useState(0)
   let lettersInterval = useRef(0)
   let divRef = useRef()
   const startTime = useRef(new Date())
+  const [seconds, setSeconds] = useState(0)
+  const gameTimer = useRef(0)
 
-  const updateMissCount = (count) => {
-    setMissCount(missCount + count)
-  }
+  // callback, to be called from Child Component
+  const updateMissCount = count => setMissCount(missCount + count)
+  useEffect(() => {
+    if (missCount > 10) {
+      alert("Game Over")
+      clearInterval(lettersInterval.current)
+      clearInterval(gameTimer.current)
+    }
+  }, [missCount])
 
   useEffect(() => {
     document.title = 'Typing Game'
 
+    // start timer
+    gameTimer.current = setInterval(() => {
+      let tempSeconds = Math.trunc((new Date() - startTime.current) / 1000)
+      setSeconds(() => tempSeconds)
+    }, 1000)
+
+    // generate letter for every 1 second
     lettersInterval.current = setInterval(() => {
       setLetters(chars => {
         return [...chars, generateLetter()]
@@ -32,15 +58,17 @@ export default function Game() {
 
   useEffect(() => {
     if (letters.filter(item => item.display).length >= 10) {
-      clearInterval(lettersInterval.current)
+      // clearInterval(lettersInterval.current)
     }
   }, [letters])
 
   let clearLetter = (event) => {
-    switch (true){
-      case event.key === 'Escape': break;
-      case event.key === 'Enter': break;
-      case event.key.match(/[a-zA-Z]/).length > 0:
+    switch (true) {
+      case event.key === 'Escape':
+        break;
+      case event.key === 'Enter':
+        break;
+      case event.key.match(/[a-zA-Z]/) != null:
         let index = letters.findIndex(item => item.val.toLowerCase() === event.key.toLowerCase() && item.display)
         if (index > -1) {
           letters[index].display = false
@@ -57,9 +85,9 @@ export default function Game() {
       {letters.map((item, index) => item.display && <MyLetter key={index} {...item} updateMissFn={updateMissCount}/>)}
     </div>
     <span style={{position: "absolute", right: 100, top: 10}}>
-      <div>Hits: {letters.filter(item=>item.hit).length}</div>
-      <div>Miss: {missCount}</div>
-      <div>Time: {Math.trunc((new Date()-startTime.current)/1000)}</div>
+      <div>Hits: {letters.filter(item => item.hit).length}</div>
+      <div>Miss: {missCount}/10</div>
+      <div>Time: {seconds}</div>
     </span>
   </div>
 }
