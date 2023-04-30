@@ -28,15 +28,27 @@ export default function Game() {
   const gameTimer = useRef(0)
 
   // callback, to be called from Child Component
-  const updateMissCount = count => setMissCount(missCount + count)
-  useEffect(() => {
-    if (missCount > 10) {
-      alert("Game Over")
-      clearInterval(lettersInterval.current)
-      clearInterval(gameTimer.current)
-    }
-  }, [missCount])
+  const updateMiss = id => {
+    letters.find(item => item.id === id).miss = true
+    setLetters([...letters])
+  }
+  // const updateMissCount = id => setMissCount(missCount + count)
 
+  // useEffect(() => {
+  //   if (missCount > 10) {
+  //     alert("Game Over")
+  //     clearInterval(lettersInterval.current)
+  //     clearInterval(gameTimer.current)
+  //   }
+  // }, [missCount])
+
+  // useEffect(() => {
+  //   if (letters.filter(item => item.display).length >= 10) {
+  //     clearInterval(lettersInterval.current)
+  //   }
+  // }, [letters])
+
+  // One time - onMount
   useEffect(() => {
     document.title = 'Typing Game'
 
@@ -47,29 +59,20 @@ export default function Game() {
     }, 1000)
 
     // generate letter for every 1 second
-    lettersInterval.current = setInterval(() => {
-      setLetters(chars => {
-        return [...chars, generateLetter()]
-      })
-    }, 1000)
-    console.log("interval: ", lettersInterval.current)
+    lettersInterval.current = setInterval(() => setLetters(chars => [...chars, generateLetter()]), 1000)
+
     divRef.current.focus()
   }, [])
 
-  useEffect(() => {
-    if (letters.filter(item => item.display).length >= 10) {
-      // clearInterval(lettersInterval.current)
-    }
-  }, [letters])
 
-  let clearLetter = (event) => {
+  let checkAndClearLetter = (event) => {
     switch (true) {
       case event.key === 'Escape':
         break;
       case event.key === 'Enter':
         break;
       case event.key.match(/[a-zA-Z]/) != null:
-        let index = letters.findIndex(item => item.val.toLowerCase() === event.key.toLowerCase() && item.display)
+        let index = letters.findIndex(item => item.val.toLowerCase() === event.key.toLowerCase() && item.display && !item.miss)
         if (index > -1) {
           letters[index].display = false
           letters[index].hit = true
@@ -80,29 +83,31 @@ export default function Game() {
   }
 
   return <div>
-    <div style={{width: "100%", height: "100%"}} ref={divRef} onKeyDown={clearLetter} tabIndex={0}
+    <div style={{width: "100%", height: "100%"}} ref={divRef} onKeyDown={checkAndClearLetter} tabIndex={0}
          onClick={() => console.log("clicked")}>
-      {letters.map((item, index) => item.display && <MyLetter key={index} {...item} updateMissFn={updateMissCount}/>)}
+      {letters.map((item, index) => item.display && <MyLetter key={index} {...item} updateMissFn={updateMiss}/>)}
     </div>
-    <span style={{position: "absolute", right: 100, top: 10}}>
+    <span style={{position: "absolute", right: 50, top: 10, fontFamily: "courier"}}>
       <div>Hits: {letters.filter(item => item.hit).length}</div>
-      <div>Miss: {missCount}/10</div>
+      <div>Miss: {letters.filter(item => item.miss).length}</div>
       <div>Time: {seconds}</div>
     </span>
   </div>
 }
 
-function random(max) {
-  return Math.floor(Math.random() * max)
-}
+let random = max => Math.floor(Math.random() * max)
+
+let sequenceId = 1
 
 function generateLetter() {
   return {
-    val: String.fromCharCode(0x41 + random(26)),
+    id: sequenceId++,
+    val: String.fromCharCode(0x41 + random(26)),  // letter
     row: 0,
-    col: random(innerWidth - 100),
+    col: random(innerWidth - 50),
+
     speed: 100 + random(100),
-    jump: 10 + random(10),
+    jump: 10,
     display: true
   }
 }
