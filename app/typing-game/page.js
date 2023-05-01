@@ -21,11 +21,13 @@ export default function Game() {
 
   let [letters, setLetters] = useState([])
   let [missCount, setMissCount] = useState(0)
-  let lettersInterval = useRef(0)
   let divRef = useRef()
   const startTime = useRef(new Date())
   const [seconds, setSeconds] = useState(0)
   const gameTimer = useRef(0)
+
+  let generatingIntervalRef = useRef(0)
+  let [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
   // callback, to be called from Child Component
   const updateMiss = id => {
@@ -58,15 +60,33 @@ export default function Game() {
       setSeconds(() => tempSeconds)
     }, 1000)
 
-    // generate letter for every 1 second
-    lettersInterval.current = setInterval(() => setLetters(chars => [...chars, generateLetter()]), 1000)
-
     divRef.current.focus()
   }, [])
 
+  useEffect(()=>{
+    clearInterval(generatingIntervalRef.current)
+    generatingIntervalRef.current = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+  }, [generatingSpeed])
 
   let checkAndClearLetter = (event) => {
     switch (true) {
+      case event.code === 'Space': // pause
+        // todo: pause timer
+        // todo: pause falling letters
+        // clearInterval(generatingIntervalRef.current)
+        break
+      case event.key === 'ArrowUp':
+        if(generatingSpeed === 100) {
+          return
+        }
+        setGeneratingSpeed(generatingSpeed - 100)
+        break
+      case event.key === 'ArrowDown':
+        if(generatingSpeed === 1000) {
+          return
+        }
+        setGeneratingSpeed(generatingSpeed + 100)
+        break
       case event.key === 'Escape':
         break;
       case event.key === 'Enter':
@@ -91,6 +111,7 @@ export default function Game() {
       <div>Hits: {letters.filter(item => item.hit).length}</div>
       <div>Miss: {letters.filter(item => item.miss).length}</div>
       <div>Time: {seconds}</div>
+      <div>Speed: {11 - (generatingSpeed / 100)}</div>
     </span>
   </div>
 }
