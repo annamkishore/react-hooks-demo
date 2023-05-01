@@ -1,5 +1,5 @@
 // feature #3(next): title
-export const metadata = {title: 'Tree Demo'}
+export const metadata = {title: 'Typing Game'}
 import './global.css'
 
 export default function RootLayout({children}) {
