@@ -1,5 +1,8 @@
 "use client"
 
+// Reference
+// https://dmitripavlutin.com/react-usememo-hook/
+
 import {useState, useMemo} from 'react';
 
 export default function CalculateFactorial() {
