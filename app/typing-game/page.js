@@ -3,77 +3,66 @@
 import MyLetter from "./my-letter";
 import {useEffect, useRef, useState} from "react";
 
-// 1. letter from top to bottom with an interval
-// 2. get screen height
-// 3. clear interval
-
-/**
- *
- * issues
- *  1, Hits increasing for missed letters
- *  2, Gameover to have box
- *  3, stop falling letters after gameover (use reducer)
- */
-
 export default function Game() {
-
-  // todo: pack ref variables for more clarity
-
   let [letters, setLetters] = useState([])
-  let [missCount, setMissCount] = useState(0)
-  let divRef = useRef()
-  const startTime = useRef(new Date())
   const [seconds, setSeconds] = useState(0)
-  const gameTimer = useRef(0)
-
-  let generatingIntervalRef = useRef(0)
   let [generatingSpeed, setGeneratingSpeed] = useState(1000)
+
+  let divRef = useRef()
+
+  let gameObj = useRef({
+    startTime: Date.now(),
+    gameTimer: 0,
+    paused: false,
+    pauseTime: 0,
+    totalPauseTime: 0,
+    generatingIntervalRef: 0
+  })
 
   // callback, to be called from Child Component
   const updateMiss = id => {
     letters.find(item => item.id === id).miss = true
     setLetters([...letters])
   }
-  // const updateMissCount = id => setMissCount(missCount + count)
 
-  // useEffect(() => {
-  //   if (missCount > 10) {
-  //     alert("Game Over")
-  //     clearInterval(lettersInterval.current)
-  //     clearInterval(gameTimer.current)
-  //   }
-  // }, [missCount])
-
-  // useEffect(() => {
-  //   if (letters.filter(item => item.display).length >= 10) {
-  //     clearInterval(lettersInterval.current)
-  //   }
-  // }, [letters])
+  let startAndGetGameTimer = () => setInterval(() => {
+    let durationSeconds = Math.trunc((Date.now() - gameObj.current.startTime) / 1000) - gameObj.current.totalPauseTime
+    setSeconds(() => durationSeconds)
+  }, 1000)
 
   // One time - onMount
   useEffect(() => {
     document.title = 'Typing Game'
 
     // start timer
-    gameTimer.current = setInterval(() => {
-      let tempSeconds = Math.trunc((new Date() - startTime.current) / 1000)
-      setSeconds(() => tempSeconds)
-    }, 1000)
+    gameObj.current.gameTimer = startAndGetGameTimer()
 
     divRef.current.focus()
   }, [])
 
   useEffect(()=>{
-    clearInterval(generatingIntervalRef.current)
-    generatingIntervalRef.current = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+    clearInterval(gameObj.current.generatingIntervalRef)
+    gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
   }, [generatingSpeed])
 
   let checkAndClearLetter = (event) => {
     switch (true) {
       case event.code === 'Space': // pause
-        // todo: pause timer
-        // todo: pause falling letters
-        // clearInterval(generatingIntervalRef.current)
+        // done: pause timer
+        // done: pause falling letters
+        // done: pause generating letters
+        if(gameObj.current.paused) {
+          gameObj.current.gameTimer = startAndGetGameTimer()
+          gameObj.current.paused = false
+          gameObj.current.pauseTime = Math.trunc((Date.now() - gameObj.current.pauseTime)/1000)
+          gameObj.current.totalPauseTime += gameObj.current.pauseTime
+          gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+        } else {
+          clearInterval(gameObj.current.gameTimer)
+          clearInterval(gameObj.current.generatingIntervalRef)
+          gameObj.current.paused = true
+          gameObj.current.pauseTime = Date.now()
+        }
         break
       case event.key === 'ArrowUp':
         if(generatingSpeed === 100) {
@@ -103,9 +92,13 @@ export default function Game() {
   }
 
   return <div>
-    <div style={{width: "100%", height: "100%"}} ref={divRef} onKeyDown={checkAndClearLetter} tabIndex={0}
-         onClick={() => console.log("clicked")}>
-      {letters.map((item, index) => item.display && <MyLetter key={index} {...item} updateMissFn={updateMiss}/>)}
+    <div style={{width: "100%", height: "100vh"}} ref={divRef} onKeyDown={checkAndClearLetter} tabIndex={0}>
+      {letters.map((item, index) => item.display &&
+        <MyLetter key={index}
+                  {...item}
+                  paused={gameObj.current.paused}
+                  updateMissFn={updateMiss}/>
+      )}
     </div>
     <span style={{position: "absolute", right: 50, top: 10, fontFamily: "courier"}}>
       <div>Hits: {letters.filter(item => item.hit).length}</div>
