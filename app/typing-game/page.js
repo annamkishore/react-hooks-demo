@@ -2,19 +2,19 @@
 
 import MyLetter from "./my-letter";
 import {useEffect, useRef, useState} from "react";
+import generateLetter from "./generate";
 
 function useForceUpdate(){
   const [value, setValue] = useState(0);
   return () => setValue(value => value + 1);
 }
 export default function Game() {
-  let [letters, setLetters] = useState([])
+  const [letters, setLetters] = useState([])
   const [seconds, setSeconds] = useState(0)
-  let [generatingSpeed, setGeneratingSpeed] = useState(1000)
+  const [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
-  let divRef = useRef()
-
-  let gameObj = useRef({
+  const divRef = useRef()
+  const gameObj = useRef({
     startTime: Date.now(),
     gameTimer: 0,
     paused: false,
@@ -38,13 +38,11 @@ export default function Game() {
   // One time - onMount
   useEffect(() => {
     document.title = 'Typing Game'
-
-    // start timer
     gameObj.current.gameTimer = startAndGetGameTimer()
-
     divRef.current.focus()
   }, [])
 
+  // on Generate speed change
   useEffect(()=>{
     clearInterval(gameObj.current.generatingIntervalRef)
     gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
@@ -103,28 +101,23 @@ export default function Game() {
                   updateMissFn={updateMiss}/>
       )}
     </div>
-    <span style={{position: "absolute", right: 50, top: 10, fontFamily: "courier"}}>
-      <div>Hits: {letters.filter(item => item.hit).length}</div>
-      <div>Miss: {letters.filter(item => item.miss).length}</div>
-      <div>Time: {seconds}</div>
-      <div>Speed: {11 - (generatingSpeed / 100)}</div>
-    </span>
+    <Stats
+      hits={letters.filter(item => item.hit).length}
+      miss={letters.filter(item => item.miss).length}
+      time={seconds}
+      speed={11 - (generatingSpeed / 100)}
+    />
   </div>
 }
 
-let random = max => Math.floor(Math.random() * max)
-
-let sequenceId = 1
-
-function generateLetter() {
-  return {
-    id: sequenceId++,
-    val: String.fromCharCode(0x41 + random(26)),  // letter
-    row: 0,
-    col: random(innerWidth - 50),
-
-    speed: 100 + random(100),
-    jump: 10,
-    display: true
-  }
+function Stats({hits, miss, time, speed}) {
+  const pad = (num, count=4)  => String(num).padStart(count, '_')
+  return <span style={{position: "absolute", right: 0, top: 10, fontFamily: "courier"}}>
+      <div>Hits {pad(hits)}</div>
+      <div>Miss {pad(miss)}</div>
+      <div>Time {pad(time)}</div>
+      <div>Spēd {pad(speed)}</div>
+      <br/>
+      <div>Space: pause</div>
+    </span>
 }
