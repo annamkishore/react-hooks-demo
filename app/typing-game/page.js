@@ -3,6 +3,10 @@
 import MyLetter from "./my-letter";
 import {useEffect, useRef, useState} from "react";
 
+function useForceUpdate(){
+  const [value, setValue] = useState(0);
+  return () => setValue(value => value + 1);
+}
 export default function Game() {
   let [letters, setLetters] = useState([])
   const [seconds, setSeconds] = useState(0)
@@ -18,6 +22,7 @@ export default function Game() {
     totalPauseTime: 0,
     generatingIntervalRef: 0
   })
+  let forceUpdate = useForceUpdate()
 
   // callback, to be called from Child Component
   const updateMiss = id => {
@@ -48,9 +53,6 @@ export default function Game() {
   let checkAndClearLetter = (event) => {
     switch (true) {
       case event.code === 'Space': // pause
-        // done: pause timer
-        // done: pause falling letters
-        // done: pause generating letters
         if(gameObj.current.paused) {
           gameObj.current.gameTimer = startAndGetGameTimer()
           gameObj.current.paused = false
@@ -63,6 +65,7 @@ export default function Game() {
           gameObj.current.paused = true
           gameObj.current.pauseTime = Date.now()
         }
+        forceUpdate()
         break
       case event.key === 'ArrowUp':
         if(generatingSpeed === 100) {
