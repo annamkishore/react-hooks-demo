@@ -61,17 +61,17 @@ export default function Game() {
         }
         forceUpdate()
         break
-      case event.key === 'ArrowUp':
-        if(generatingSpeed === 100) {
+      case event.key === 'ArrowUp': // speed increase by 70
+        if(generatingSpeed <= 400) {
           return
         }
-        setGeneratingSpeed(generatingSpeed - 100)
+        setGeneratingSpeed(generatingSpeed - 70)
         break
-      case event.key === 'ArrowDown':
-        if(generatingSpeed === 1000) {
+      case event.key === 'ArrowDown': // speed decrease
+        if(generatingSpeed >= 1000) {
           return
         }
-        setGeneratingSpeed(generatingSpeed + 100)
+        setGeneratingSpeed(generatingSpeed + 70)
         break
       case event.key === 'Escape':
         break;
@@ -101,7 +101,7 @@ export default function Game() {
       hits={letters.filter(item => item.hit).length}
       miss={letters.filter(item => item.miss).length}
       time={seconds}
-      speed={11 - (generatingSpeed / 100)}
+      speed={11 - ((generatingSpeed-300) / 70)}
     />
   </div>
 }
