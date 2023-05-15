@@ -9,11 +9,10 @@ import generateLetter from "./generate";
 export default function Game() {
   const [letters, setLetters] = useState([])
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
-  const [seconds, startTime, pauseTime] = useShowTime()
+  const [seconds, paused, startTime, pauseTime] = useShowTime()
 
   const divRef = useRef()
   const gameObj = useRef({
-    paused: false,
     generatingIntervalRef: 0
   })
   let forceUpdate = useForceUpdate()
@@ -39,12 +38,10 @@ export default function Game() {
   let checkAndClearLetter = (event) => {
     switch (true) {
       case event.code === 'Space': // pause
-        if(gameObj.current.paused) {
-          gameObj.current.paused = false
+        if(paused) {
           startTime()
           gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
         } else {
-          gameObj.current.paused = true
           pauseTime()
           clearInterval(gameObj.current.generatingIntervalRef)
         }
@@ -82,7 +79,7 @@ export default function Game() {
       {letters.map((item, index) => item.display &&
         <MyLetter key={index}
                   {...item}
-                  paused={gameObj.current.paused}
+                  paused={paused}
                   updateMissFn={updateMiss}/>
       )}
     </div>

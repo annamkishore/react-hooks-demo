@@ -6,7 +6,9 @@ export function useShowTime() {
     startTime: Date.now(),
     pauseTime: null,
     totalPauseTime: 0,
-    timerRef: 0
+    timerRef: 0,
+
+    paused: false
   })
 
   useEffect(()=>{
@@ -14,6 +16,7 @@ export function useShowTime() {
   }, [])
 
   const startTime = () => {
+    timeRef.current.paused = false
     timeRef.current.totalPauseTime += timeRef.current.pauseTime ? Math.trunc((Date.now() - timeRef.current.pauseTime) / 1000) : 0
 
     timeRef.current.timerRef = setInterval(() => {
@@ -22,11 +25,12 @@ export function useShowTime() {
     }, 1000)
   }
   const pauseTime = () => {
+    timeRef.current.paused = true
     clearInterval(timeRef.current.timerRef)
     timeRef.current.pauseTime = Date.now()
   }
 
-  return [seconds, startTime, pauseTime]
+  return [seconds, timeRef.current.paused, startTime, pauseTime]
 }
 
 export function useForceUpdate(){
