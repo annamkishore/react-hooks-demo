@@ -1,34 +1,27 @@
 "use client"
 
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useReducer, useRef, useState} from "react";
 
 import MyLetter from "./my-letter";
 import {useForceUpdate, useGameTimer} from "./game-hooks";
-import generateLetter from "./generate";
+import {gameReducer} from "./game-reducer";
 
 /**
  * Game Component
  */
-
 export default function Game() {
-  // state
-  const [letters, setLetters] = useState([])
+  const [state, dispatch] = useReducer(gameReducer, {letters: []})
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
-  // custom hooks
   const [seconds, paused, startTime, pauseTime] = useGameTimer()
   const forceUpdate = useForceUpdate()
 
-  // refs
   const divRef = useRef()
-  const gameObj = useRef({
-    generatingIntervalRef: 0
-  })
+  const gameObj = useRef({generatingIntervalRef: 0})
 
   // callback, to be called from Child Component
   const updateMiss = id => {
-    letters.find(item => item.id === id).miss = true
-    setLetters([...letters])
+    dispatch({type: "missed", data: id})
   }
 
   // One time - onMount
@@ -37,10 +30,10 @@ export default function Game() {
     divRef.current.focus()
   }, [])
 
-  // on Generate speed change
+  // on Generating speed change
   useEffect(()=>{
     clearInterval(gameObj.current.generatingIntervalRef)
-    gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+    gameObj.current.generatingIntervalRef = setInterval(() => dispatch({type: "add-letter"}), generatingSpeed)
   }, [generatingSpeed])
 
   let checkAndClearLetter = (event) => {
@@ -50,7 +43,7 @@ export default function Game() {
           return
         }
         startTime()
-        gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+        gameObj.current.generatingIntervalRef = setInterval(() => dispatch({type: "add-letter"}), generatingSpeed)
         forceUpdate()
         break
       case event.code === 'Space': // pause
@@ -75,19 +68,15 @@ export default function Game() {
       case event.key === 'Enter':
         break;
       case event.key.match(/[a-zA-Z]/) != null:
-        let index = letters.findIndex(item => item.val.toLowerCase() === event.key.toLowerCase() && item.display && !item.miss)
-        if (index > -1) {
-          letters[index].display = false
-          letters[index].hit = true
-          setLetters([...letters])
-        }
+        dispatch({type: "hit", data: event.key.toLowerCase()})
+        forceUpdate()
         break;
     }
   }
 
   return <div>
     <div style={{width: "100%", height: "100vh"}} ref={divRef} onKeyDown={checkAndClearLetter} tabIndex={0}>
-      {letters.map((item, index) => item.display &&
+      {state.letters.map((item, index) => item.display &&
         <MyLetter key={index}
                   {...item}
                   paused={paused}
@@ -95,8 +84,8 @@ export default function Game() {
       )}
     </div>
     <Stats
-      hits={letters.filter(item => item.hit).length}
-      miss={letters.filter(item => item.miss).length}
+      hits={state.letters.filter(item => item.hit).length}
+      miss={state.letters.filter(item => item.miss).length}
       time={seconds}
       speed={11 - ((generatingSpeed-300) / 70)}
     />
