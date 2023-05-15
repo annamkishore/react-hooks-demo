@@ -1,21 +1,21 @@
 import generateLetter from "./generate";
 
 export function gameReducer(state, action) {
+  let letters = state.letters
+
   switch (action.type) {
     case "add-letter":
-      state.letters.push(generateLetter())
-      return state
+      letters.push(generateLetter())
+      break
     case "hit":
-      let index = state.letters.findIndex(item => item.val.toLowerCase() === action.data && item.display && !item.miss)
-      if (index > -1) {
-        state.letters[index].display = false
-        state.letters[index].hit = true
-        return state
-      }
-      return state
+      let letterObj = letters.find(item => item.val.toLowerCase() === action.data && item.display && !item.miss)
+      letterObj && Object.assign(letterObj, {display: false, hit: true})
+      break
     case "missed":
       let id = action.data
-      state.letters.find(item => item.id === id).miss = true
-      return state
+      letters.find(item => item.id === id).miss = true
+      break
   }
+
+  return state
 }
