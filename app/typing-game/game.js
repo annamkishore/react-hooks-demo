@@ -1,21 +1,19 @@
 "use client"
 
-import MyLetter from "./my-letter";
 import {useEffect, useRef, useState} from "react";
+
+import MyLetter from "./my-letter";
+import {useForceUpdate, useShowTime} from "./game-hooks";
 import generateLetter from "./generate";
 
 export default function Game() {
   const [letters, setLetters] = useState([])
-  const [seconds, setSeconds] = useState(0)
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
+  const [seconds, startTime, pauseTime] = useShowTime()
 
   const divRef = useRef()
   const gameObj = useRef({
-    startTime: Date.now(),
-    gameTimer: 0,
     paused: false,
-    pauseTime: 0,
-    totalPauseTime: 0,
     generatingIntervalRef: 0
   })
   let forceUpdate = useForceUpdate()
@@ -26,15 +24,9 @@ export default function Game() {
     setLetters([...letters])
   }
 
-  let startAndGetGameTimer = () => setInterval(() => {
-    let durationSeconds = Math.trunc((Date.now() - gameObj.current.startTime) / 1000) - gameObj.current.totalPauseTime
-    setSeconds(() => durationSeconds)
-  }, 1000)
-
   // One time - onMount
   useEffect(() => {
     document.title = 'Typing Game'
-    gameObj.current.gameTimer = startAndGetGameTimer()
     divRef.current.focus()
   }, [])
 
@@ -48,16 +40,13 @@ export default function Game() {
     switch (true) {
       case event.code === 'Space': // pause
         if(gameObj.current.paused) {
-          gameObj.current.gameTimer = startAndGetGameTimer()
           gameObj.current.paused = false
-          gameObj.current.pauseTime = Math.trunc((Date.now() - gameObj.current.pauseTime)/1000)
-          gameObj.current.totalPauseTime += gameObj.current.pauseTime
+          startTime()
           gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
         } else {
-          clearInterval(gameObj.current.gameTimer)
-          clearInterval(gameObj.current.generatingIntervalRef)
           gameObj.current.paused = true
-          gameObj.current.pauseTime = Date.now()
+          pauseTime()
+          clearInterval(gameObj.current.generatingIntervalRef)
         }
         forceUpdate()
         break
@@ -106,14 +95,9 @@ export default function Game() {
   </div>
 }
 
-function useForceUpdate(){
-  const [value, setValue] = useState(0);
-  return () => setValue(value => value + 1);
-}
-
 function Stats({hits, miss, time, speed}) {
   const pad = (num, count=4)  => String(num).padStart(count, '_')
-  return <span style={{position: "absolute", right: 10, top: 10, fontFamily: "courier"}}>
+  return <span style={{position: "absolute", right: 10, top: 10, fontFamily: "courier", opacity: "60%"}}>
       <div>Hits {pad(hits)}</div>
       <div>Miss {pad(miss)}</div>
       <div>Time {pad(time)}</div>
