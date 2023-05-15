@@ -7,15 +7,19 @@ import {useForceUpdate, useShowTime} from "./game-hooks";
 import generateLetter from "./generate";
 
 export default function Game() {
+  // state
   const [letters, setLetters] = useState([])
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
-  const [seconds, paused, startTime, pauseTime] = useShowTime()
 
+  // custom hooks
+  const [seconds, paused, startTime, pauseTime] = useShowTime()
+  const forceUpdate = useForceUpdate()
+
+  // refs
   const divRef = useRef()
   const gameObj = useRef({
     generatingIntervalRef: 0
   })
-  let forceUpdate = useForceUpdate()
 
   // callback, to be called from Child Component
   const updateMiss = id => {
