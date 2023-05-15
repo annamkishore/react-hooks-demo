@@ -1,13 +1,9 @@
-# react-tree-demo
-
-### Self explanatory points/documentation
-
-- React Hooks used
-- antd Tree component used
-- given treemenu.json converted to antd understandable json
-- React App based on Next.JS
+# one place for... 
+- React Hooks, ES6, and concepts like currying, etc.. 
+- typing-game for Prem
 
 ### Steps to run
 - yarn      (installs packages)
 - yarn dev  (runs demo)
 - open browser and access via http://localhost:3000 (port number might change)
+- typing-game http://localhost:3000/typing-game
