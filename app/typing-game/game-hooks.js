@@ -1,10 +1,13 @@
 import {useEffect, useRef, useState} from "react";
 
-export function useShowTime() {
+/**
+ * Game Timer Hook
+ */
+export function useGameTimer() {
   const [seconds, setSeconds] = useState(0)
   const timeRef = useRef({
-    startTime: Date.now(),
-    pauseTime: null,
+    startTime: Date.now(),  // initial game start time
+    pauseTime: null,        // whenever paused
     totalPauseTime: 0,
     timerRef: 0,
 
@@ -33,6 +36,9 @@ export function useShowTime() {
   return [seconds, timeRef.current.paused, startTime, pauseTime]
 }
 
+/**
+ * Force Update Hook
+ */
 export function useForceUpdate(){
   const [value, setValue] = useState(0);
   return () => setValue(value => value + 1);

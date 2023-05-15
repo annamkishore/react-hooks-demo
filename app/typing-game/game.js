@@ -3,8 +3,12 @@
 import {useEffect, useRef, useState} from "react";
 
 import MyLetter from "./my-letter";
-import {useForceUpdate, useShowTime} from "./game-hooks";
+import {useForceUpdate, useGameTimer} from "./game-hooks";
 import generateLetter from "./generate";
+
+/**
+ * Game Component
+ */
 
 export default function Game() {
   // state
@@ -12,7 +16,7 @@ export default function Game() {
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
   // custom hooks
-  const [seconds, paused, startTime, pauseTime] = useShowTime()
+  const [seconds, paused, startTime, pauseTime] = useGameTimer()
   const forceUpdate = useForceUpdate()
 
   // refs
@@ -41,14 +45,17 @@ export default function Game() {
 
   let checkAndClearLetter = (event) => {
     switch (true) {
-      case event.code === 'Space': // pause
-        if(paused) {
-          startTime()
-          gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
-        } else {
-          pauseTime()
-          clearInterval(gameObj.current.generatingIntervalRef)
+      case paused:
+        if(event.code !== 'Space') {
+          return
         }
+        startTime()
+        gameObj.current.generatingIntervalRef = setInterval(() => setLetters(chars => [...chars, generateLetter()]), generatingSpeed)
+        forceUpdate()
+        break
+      case event.code === 'Space': // pause
+        pauseTime()
+        clearInterval(gameObj.current.generatingIntervalRef)
         forceUpdate()
         break
       case event.key === 'ArrowUp': // speed increase by 70
@@ -95,6 +102,10 @@ export default function Game() {
     />
   </div>
 }
+
+/**
+ * Stats Component
+ */
 
 function Stats({hits, miss, time, speed}) {
   const pad = (num, count=4)  => String(num).padStart(count, '_')

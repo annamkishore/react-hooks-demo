@@ -2,6 +2,9 @@
 
 import {useEffect, useRef, useState} from 'react'
 
+/**
+ * MyLetter Component
+ */
 export default function MyLetter({val, col = 100, row = 0, speed = 100, jump = 10, id, updateMissFn, paused}) {
   const [left, setLeft] = useState(col)
   const [top, setTop] = useState(row)
