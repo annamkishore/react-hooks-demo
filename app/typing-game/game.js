@@ -10,7 +10,11 @@ import {gameReducer} from "./game-reducer";
  * Game Component
  */
 export default function Game() {
-  const [state, dispatch] = useReducer(gameReducer, {letters: []})
+  const [state, dispatch] = useReducer(gameReducer, {
+    letters: [],
+    hitCount:0,
+    missCount:0
+  })
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
   const [seconds, paused, startTime, pauseTime] = useGameTimer()
@@ -84,8 +88,8 @@ export default function Game() {
       )}
     </div>
     <Stats
-      hits={state.letters.filter(item => item.hit).length}
-      miss={state.letters.filter(item => item.miss).length}
+      hits={state.hitCount}
+      miss={state.missCount}
       time={seconds}
       speed={11 - ((generatingSpeed-300) / 70)}
     />

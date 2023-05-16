@@ -1,5 +1,15 @@
 import generateLetter from "./generate";
 
+/**
+ *
+ * Reducer State Object..
+ *
+ * {
+ *   letters: []
+ *   hitCount: 0
+ *   missCount: 0
+ * }
+ */
 export function gameReducer(state, action) {
   let letters = state.letters
 
@@ -9,11 +19,15 @@ export function gameReducer(state, action) {
       break
     case "hit":
       let letterObj = letters.find(item => item.val.toLowerCase() === action.data && item.display && !item.miss)
-      letterObj && Object.assign(letterObj, {display: false, hit: true})
+      if(letterObj) {
+        Object.assign(letterObj, {display: false, hit: true})
+        state.hitCount++
+      }
       break
     case "missed":
       let id = action.data
       letters.find(item => item.id === id).miss = true
+      state.missCount++
       break
   }
 
