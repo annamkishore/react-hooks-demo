@@ -15,6 +15,7 @@ export default function Game() {
     hitCount:0,
     missCount:0
   })
+  const [gameOver, setGameOver] = useState(false)
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
 
   const [seconds, paused, startTime, pauseTime] = useGameTimer()
@@ -22,6 +23,14 @@ export default function Game() {
 
   const divRef = useRef()
   const gameObj = useRef({generatingIntervalRef: 0})
+
+  useEffect(()=>{
+    if(!paused && state.missCount >= 10) {
+      setGameOver(true)
+      pauseTime()
+      forceUpdate()
+    }
+  })
 
   // callback, to be called from Child Component
   const updateMiss = id => {
@@ -41,6 +50,10 @@ export default function Game() {
   }, [generatingSpeed])
 
   let checkAndClearLetter = (event) => {
+    if(gameOver) {
+      return;
+    }
+
     switch (true) {
       case paused:
         if(event.code !== 'Space') {
@@ -93,6 +106,7 @@ export default function Game() {
       time={seconds}
       speed={11 - ((generatingSpeed-300) / 70)}
     />
+    {gameOver && <div style={{position: "absolute", left: (innerWidth/2)-200, top: 100, fontSize: "5rem"}}>Game Over</div>}
   </div>
 }
 
