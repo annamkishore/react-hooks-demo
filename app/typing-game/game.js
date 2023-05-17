@@ -118,7 +118,7 @@ function Stats({hits, miss, time, speed}) {
   const pad = (num, count=4)  => String(num).padStart(count, '_')
   return <span style={{position: "absolute", right: 10, top: 10, fontFamily: "courier", opacity: "60%"}}>
       <div>Hits {pad(hits)}</div>
-      <div>Miss {pad(miss)}</div>
+      <div>Miss {miss}/10</div>
       <div>Time {pad(time)}</div>
       <div>Spēd {pad(speed)}</div>
       <br/>
