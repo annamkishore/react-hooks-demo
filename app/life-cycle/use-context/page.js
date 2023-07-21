@@ -2,9 +2,13 @@
 
 import {createContext, useContext, useState} from "react";
 
+// -----------------main component, exported-----------------
+
 export default function UseContextDemo() {
   return <Component1 />
 }
+
+// -------------------------------------------------------
 
 // feature #4(--react): useContext, reducing props passing into child components
 let UserContext = createContext()
