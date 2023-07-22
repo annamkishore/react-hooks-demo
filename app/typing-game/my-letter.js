@@ -36,3 +36,19 @@ export default function MyLetter({val, col = 100, row = 0, speed = 100, jump = 1
     <span style={{position: "fixed", left, top}}><h1>{val}</h1></span>
   </>
 }
+
+/**
+ * Stats Component
+ */
+export function Stats({hits, miss, time, speed}) {
+  const pad = (num, count = 4) => String(num).padStart(count, '_')
+  return <span style={{position: "absolute", right: 10, top: 10, fontFamily: "courier", opacity: "60%"}}>
+      <div>Hits {pad(hits)}</div>
+      <div>Miss {miss}/10</div>
+      <div>Time {pad(time)}</div>
+      <div>Spēd {pad(speed)}</div>
+      <br/>
+      <div>Space: pause</div>
+      <div>&nbsp;&nbsp;↑/↓: speed</div>
+    </span>
+}

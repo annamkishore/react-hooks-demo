@@ -2,7 +2,7 @@
 
 import {useEffect, useReducer, useRef, useState} from "react";
 
-import MyLetter from "./my-letter";
+import MyLetter, {Stats} from "./my-letter";
 import {useForceUpdate, useGameTimer} from "./game-hooks";
 import {gameReducer} from "./game-reducer";
 
@@ -12,8 +12,8 @@ import {gameReducer} from "./game-reducer";
 export default function Game() {
   const [state, dispatch] = useReducer(gameReducer, {
     letters: [],
-    hitCount:0,
-    missCount:0
+    hitCount: 0,
+    missCount: 0
   })
   const [gameOver, setGameOver] = useState(false)
   const [generatingSpeed, setGeneratingSpeed] = useState(1000)
@@ -24,8 +24,8 @@ export default function Game() {
   const divRef = useRef()
   const gameObj = useRef({generatingIntervalRef: 0})
 
-  useEffect(()=>{
-    if(!paused && state.missCount >= 10) {
+  useEffect(() => {
+    if (!paused && state.missCount >= 10) {
       setGameOver(true)
       pauseTime()
       forceUpdate()
@@ -44,19 +44,19 @@ export default function Game() {
   }, [])
 
   // on Generating speed change
-  useEffect(()=>{
+  useEffect(() => {
     clearInterval(gameObj.current.generatingIntervalRef)
     gameObj.current.generatingIntervalRef = setInterval(() => dispatch({type: "add-letter"}), generatingSpeed)
   }, [generatingSpeed])
 
   let checkAndClearLetter = (event) => {
-    if(gameOver) {
+    if (gameOver) {
       return;
     }
 
     switch (true) {
       case paused:
-        if(event.code !== 'Space') {
+        if (event.code !== 'Space') {
           return
         }
         startTime()
@@ -69,13 +69,13 @@ export default function Game() {
         forceUpdate()
         break
       case event.key === 'ArrowUp': // speed increase by 70
-        if(generatingSpeed <= 400) {
+        if (generatingSpeed <= 400) {
           return
         }
         setGeneratingSpeed(generatingSpeed - 70)
         break
       case event.key === 'ArrowDown': // speed decrease
-        if(generatingSpeed >= 1000) {
+        if (generatingSpeed >= 1000) {
           return
         }
         setGeneratingSpeed(generatingSpeed + 70)
@@ -104,25 +104,9 @@ export default function Game() {
       hits={state.hitCount}
       miss={state.missCount}
       time={seconds}
-      speed={11 - ((generatingSpeed-300) / 70)}
+      speed={11 - ((generatingSpeed - 300) / 70)}
     />
-    {gameOver && <div style={{position: "absolute", left: (innerWidth/2)-200, top: 100, fontSize: "5rem"}}>Game Over</div>}
+    {gameOver &&
+      <div style={{position: "absolute", left: (innerWidth / 2) - 200, top: 100, fontSize: "5rem"}}>Game Over</div>}
   </div>
-}
-
-/**
- * Stats Component
- */
-
-function Stats({hits, miss, time, speed}) {
-  const pad = (num, count=4)  => String(num).padStart(count, '_')
-  return <span style={{position: "absolute", right: 10, top: 10, fontFamily: "courier", opacity: "60%"}}>
-      <div>Hits {pad(hits)}</div>
-      <div>Miss {miss}/10</div>
-      <div>Time {pad(time)}</div>
-      <div>Spēd {pad(speed)}</div>
-      <br/>
-      <div>Space: pause</div>
-      <div>&nbsp;&nbsp;↑/↓: speed</div>
-    </span>
 }
