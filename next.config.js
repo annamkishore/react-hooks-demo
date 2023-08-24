@@ -9,7 +9,7 @@ const nextConfig = {
       {
         // feature #2(next): redirection
         source: '/',
-        destination: '/tree-sample',
+        destination: '/typing-game',
         permanent: true,
       },
     ]

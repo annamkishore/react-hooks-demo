@@ -9,6 +9,7 @@ import generateLetter from "./util-generate";
  *   hitCount: 0
  *   missCount: 0
  * }
+ * //usage example: dispatch({type: "missed", data: id})
  */
 export function gameReducer(state, action) {
   let letters = state.letters
