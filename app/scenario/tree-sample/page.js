@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useEffect, useState} from 'react';
-import treeData from './treemenu-data'
+import treeData from './treemenu-data.json'
 import {Tree} from "antd";
 import {findLargestSumPair, arr1, arr2} from "./max2numbers";
 
