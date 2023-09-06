@@ -1,5 +1,15 @@
 'use client'
 
+// Reference
+// https://www.scaler.com/topics/react/usecallback
+
+//
+// useCallback, is to further optimize rendering of Child Component created via React.memo()
+//      i.e function is being created between rendering
+// don't use useCallback
+//      https://medium.com/@dev_one/how-to-use-usecallback-hook-35dc047aee48
+//
+
 import React, {useCallback, useState} from 'react'
 
 import Tasks from './Tasks'
