@@ -1,6 +1,14 @@
-# one place for... 
-- React Hooks, ES6, and concepts like currying, etc.. 
-- typing-game for Prem
+# one place for...
+- ES6
+- Frontend
+    - React Hooks
+    - Redux
+    - NextJS
+- Backend
+    - Nodejs
+- Puzzles
+- Scenarios
+- Typing-game for Prem
 
 ### Steps to run
 - yarn      (installs packages)
