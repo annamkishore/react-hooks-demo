@@ -3,7 +3,7 @@ const {ApolloServer} = require('apollo-server-express');
 const {mergeTypeDefs} = require('@graphql-tools/merge');
 const {loadFilesSync} = require('@graphql-tools/load-files');
 const path = require('path');
-const resolvers = require('./graphql/resolvers');
+const resolvers = require('./graphql/user-post-resolvers');
 
 async function startApollo() {
     // Load and merge type definitions from GraphQL files

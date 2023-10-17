@@ -8,7 +8,7 @@ const posts = [
     { id: '102', title: 'Post 2', content: 'Content 2' },
 ];
 
-const resolvers = {
+const userPostResolvers = {
     Query: {
         getUser: (_, { id }) => users.find((user) => user.id === id),
         getAllUsers: () => users,
@@ -29,4 +29,4 @@ const resolvers = {
     },
 };
 
-module.exports = resolvers;
+module.exports = userPostResolvers;
