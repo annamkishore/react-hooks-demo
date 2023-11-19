@@ -1,19 +1,20 @@
-// feature #4(next): "use client" to render in browser
+// feature #4(nextjs): "use client" to render in browser
 "use client"
+
 import {useEffect, useRef, useState} from "react";
 
-// feature #5(next): export default is mandatory, without that page will not render
+// feature #5(nextjs): export default is mandatory, without that page will not render
 export default function LifeCycleDemo() {
 
-  // feature #1(--react): state
+  // feature #1(--reactjs): state
   let [count1, setCount1] = useState(0)
   let [count2, setCount2] = useState(0)
 
-  // feature #3(--react): useRef
-  let inputRef = useRef()                 // works as id of an element
-  let dataRef = useRef(11)        // works as class variable (in Function Component)
+  // feature #3(--reactjs): useRef
+  let inputRef = useRef()             // referencing an element
+  let dataRef = useRef(11)    // referencing an object/value (works as class variable (in Function Component))
 
-  // feature #2(--react): lifecycle using useEffect
+  // feature #2(--reactjs): lifecycle using useEffect
   // ------on component mount/update
   useEffect(() => {
     dataRef.current += 1

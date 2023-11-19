@@ -1,0 +1,40 @@
+// Map
+#colors() {
+  item-color: aqua;
+  price-color: yellow;
+  container-color: grey;
+}
+
+.container {
+  width: 20rem;
+  background-color: #colors[container-color];
+  border-radius: 5px;
+  margin: 1rem;
+}
+
+// Namespace
+#card-look() {
+  .view {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+}
+
+// Nesting
+.item {
+  display: flex;
+  justify-content: space-between;
+
+  &__left {
+    width: 4rem;
+    background-color: #colors[item-color];
+    #card-look.view()
+  }
+
+  &__right {
+    width: 2rem;
+    background-color: #colors[price-color];
+    #card-look.view()
+  }
+}

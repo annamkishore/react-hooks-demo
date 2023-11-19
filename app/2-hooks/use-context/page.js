@@ -8,7 +8,7 @@ export default function UseContextDemo() {
   return <Component1 />
 }
 
-// -------------------------------------------------------
+// ----------------Private/Local/Unexported Components---------------------
 
 // feature #4(--react): useContext, reducing props passing into child components
 let UserContext = createContext()

@@ -3,9 +3,11 @@
 - Frontend
     - React Hooks
     - Redux
-    - NextJS
+    - Reselect
+    - CSS/Less
 - Backend
     - Nodejs
+    - NextJS
 - Puzzles
 - Scenarios
 - Typing-game for Prem
