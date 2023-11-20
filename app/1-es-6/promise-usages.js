@@ -3,7 +3,8 @@
 let p1 = Promise.resolve(10)
 p1.then(console.log)
 
-// 2 - Promise.all -- happy path
+// 2 - Promise.all -- happy path (atomic, i.e. all or nothing)
+//         (if one is rejected, immediately it rejects with first rejected reason)
 let pArray = [Promise.resolve(10), Promise.resolve(11), Promise.resolve(12)]
 Promise.all(pArray).then(console.log)
 
@@ -15,18 +16,17 @@ process.on('unhandledRejection', (reason, promise)=>{
 pArray = [Promise.resolve(10), Promise.reject(999), Promise.resolve(11)]
 Promise.all(pArray).then(console.log)
 
-// 4 - Promise.allSettled
+// 4 - Promise.allSettled (resolves, when all are settled(fulfilled/rejected))
 Promise.allSettled(pArray).then(console.log)
 
 // 5 - setTimeout as Promise
-function timeout(ms) {
+function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
-
 }
 
-async function f1() {
+async function sleepDemo() {
     let delay = 1000
-    await timeout(delay)
+    await sleep(delay)
     console.log(`printing after ${delay} ms timeout`)
 }
-f1()
+sleepDemo()
