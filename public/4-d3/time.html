@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    <title>Time</title>
+</head>
+
+<body>
+<script>
+    let [width, height] = [700, 700];
+    let data = [10, 20, 30, 40, 50, 60, 70];
+    let colors = ['violet', 'indigo', 'blue', 'green', 'yellow', 'orange', 'red'];
+
+    // svg
+    let svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+
+    // group
+    let g = svg.selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", (d, i) => "translate(0,0)")
+    g.append("circle")
+        .attr("cx", (d, i) => i * 75 + 50)
+        .attr("cy", (d, i) => 75)
+        .attr("r", (d, i) => d * 1.5)
+        .attr("fill", (d, i) => colors[i])
+    g.append("text")
+        .attr("x", (d, i) => i * 75 + 25)
+        .attr("y", 80)
+        .attr("stroke", "teal")
+        .attr("font-size", "10px")
+        .attr("font-family", "sans-serif")
+        .text(d => d);
+</script>
+</body>
+</html>
