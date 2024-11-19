@@ -2,26 +2,29 @@
 # Typescript Features
     1. Static Typing
     2. Type Inference
-    3. Interfaces
-    4. Classes and Inheritance
-    5. Enums
-    6. Generics
-    7. Modules and Namespaces
-    8. Type Aliases
-    9. Decorators
-    10. Access Modifiers (public, private, protected)
-    11. Union and Intersection Types
-    12. Utility Types
-    13. Asynchronous Programming with async/await
-    14. Strict Null Checking
+    3. Type Aliases
+    4. Union and Intersection Types
+    5. Utility Types
+    6. Strict Null Checking
+
+    7. Interfaces
+    8. Classes and Inheritance
+    9. Access Modifiers (public, private, protected)
+    10. Enums
+
+    11. Generics
+    12. Modules and Namespaces
+    13. Decorators
+
+    14. Type Declaration Files (.d.ts) (separate file)
     15. Compatibility with JavaScript Libraries
-    16. Type Declaration Files (.d.ts)
+    16. Backward Compatibility with JavaScript
+
     17. Advanced Type System (e.g., mapped types, conditional types)
     18. Code Navigation and Refactoring Support
     19. Tooling Integration (e.g., with VS Code)
-    20. Backward Compatibility with JavaScript
 ###
-    1. Static Typing
+## 1. Static Typing
 ```ts
     let age: number = 20;
     let name: string = "Raju";
@@ -33,13 +36,74 @@
     console.log(greet("Ravi")); // Output: Hello, Ravi!
 ```
 ###
-    2. Type Inference
+## 2. Type Inference
 ```ts
     let message = "Welcome!"; // TypeScript infers this as a 'string'
     message = 42;             // Error: Type 'number' is not assignable to type 'string'
 ```
 ###
-    3. Interfaces
+## 3. Type Aliases
+```ts
+    // allow you to create a custom name for a type
+    type StringOrNumber = string | number;
+    
+    function logValue(value: StringOrNumber): void {
+        console.log(value);
+    }
+    
+    logValue("Hello"); // Output: Hello
+    logValue(100); // Output: 100
+```
+###
+## 4. Union and Intersection Types
+```ts
+    // Union Type Example:
+    function logId(id: number | string) {
+        console.log(`ID: ${id}`);
+    }
+    
+    logId(123); // Output: ID: 123
+    logId("abc"); // Output: ID: abc
+
+    // Intersection Type Example: 
+    type Person = { name: string };
+    type Employee = { id: number };
+    
+    type EmployeeDetails = Person & Employee; // Combines Person and Employee types
+    
+    const employee: EmployeeDetails = {
+        name: "John",
+        id: 1,
+    };
+```
+## 5. Utility Types
+```ts
+    // Example of Partial:
+    interface User {
+        id: number;
+        name: string;
+        email: string;
+    }
+    
+    const updateUser = (userId: number, user: Partial<User>) => {
+        // Updates user
+    };
+    
+    updateUser(1, { name: "Alice" }); // Only updates the name
+```
+## 6. Strict Null Checking
+```ts
+    let user: string | null = null;
+    
+    // user = "Alice"; // Works fine
+    // user = undefined; // Error: Type 'undefined' is not assignable to type 'string | null'
+    
+    // To allow undefined, you can use:
+    let anotherUser: string | null | undefined;
+```
+
+###
+## 7. Interfaces
 ```ts
     // Interfaces define the structure of an object:
     interface User {
@@ -55,7 +119,7 @@
     console.log(user.name); // Output: Kṛṣṇa
 ```
 ###
-    4. Classes and Inheritance
+## 8. Classes and Inheritance
 ```ts
     // 4.1 Classes 
     class Animal {
@@ -158,7 +222,10 @@
     console.log(calculator.add("Hello, ", "world!")); // Output: Hello, world!
 ```
 ###
-    5. Enums
+## 9. Access Modifiers (public, private, protected) (separate file)
+
+###
+## 10. Enums
 ```ts
     // Enums allow you to define a set of named constants:
 
@@ -173,24 +240,11 @@
     console.log(move); // Output: 1
 ```
 ###
-    6. Generics
+## 11. Generics (separate file)
 ###
-    7. Modules and Namespaces
+## 12. Modules and Namespaces
 ###
-8. Type Aliases
-```ts
-    // allow you to create a custom name for a type
-    type StringOrNumber = string | number;
-    
-    function logValue(value: StringOrNumber): void {
-        console.log(value);
-    }
-    
-    logValue("Hello"); // Output: Hello
-    logValue(100); // Output: 100
-```
-###
-    9. Decorators
+## 13. Decorators
 ```ts
     function log(target: any, key: string) {
         console.log(`Property: ${key}`);
@@ -202,60 +256,11 @@
     }
 ```
 ###
-    10. Access Modifiers (public, private, protected)
 ###
-    11. Union and Intersection Types
-```ts
-    // Union Type Example:
-    function logId(id: number | string) {
-        console.log(`ID: ${id}`);
-    }
-    
-    logId(123); // Output: ID: 123
-    logId("abc"); // Output: ID: abc
-
-    // Intersection Type Example: 
-    type Person = { name: string };
-    type Employee = { id: number };
-    
-    type EmployeeDetails = Person & Employee; // Combines Person and Employee types
-    
-    const employee: EmployeeDetails = {
-        name: "John",
-        id: 1,
-    };
-```
 ###
-    12. Utility Types
-```ts
-    // Example of Partial:
-    interface User {
-        id: number;
-        name: string;
-        email: string;
-    }
-    
-    const updateUser = (userId: number, user: Partial<User>) => {
-        // Updates user
-    };
-    
-    updateUser(1, { name: "Alice" }); // Only updates the name
-```
+## 16. Type Declaration Files (.d.ts) (separate file)
+## 17. Code Navigation and Refactoring Support
+## 18. Tooling Integration (e.g., with VS Code)
 ###
-    14. Strict Null Checking
-```ts
-    let user: string | null = null;
-    
-    // user = "Alice"; // Works fine
-    // user = undefined; // Error: Type 'undefined' is not assignable to type 'string | null'
-    
-    // To allow undefined, you can use:
-    let anotherUser: string | null | undefined;
-```
-###
-    16. Type Declaration Files (.d.ts)
-    18. Code Navigation and Refactoring Support
-    19. Tooling Integration (e.g., with VS Code)
-###
-    20. Backward Compatibility with JavaScript
+## 19. Backward Compatibility with JavaScript
     TypeScript is a superset of JavaScript, meaning all valid JavaScript code is also valid TypeScript code.
