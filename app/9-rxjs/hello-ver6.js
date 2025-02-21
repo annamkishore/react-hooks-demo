@@ -7,15 +7,20 @@ import {tap} from 'rxjs/operators/index.js';
 //      observable means -------------- Producer
 // -------------------------------------------------
 const observable = new Observable(observer => {
-    // generate some events
+    // Generate initial events
     observer.next(1)
     observer.next(2)
-    throw new Error("err..")
-    observer.next(3)
-    setTimeout(() => {
+    observer.error(new Error("err..")); // Properly handle error
+
+    const timeoutId = setTimeout(() => {
         observer.next(4)
         observer.complete()
     }, 3000)
+
+    // Provide cleanup logic
+    return () => {
+        clearTimeout(timeoutId);
+    };
 })
 
 // -------------------------------------------------
@@ -39,7 +44,7 @@ function test1() {
 function test2() {
     let sourceObservable = of(11, 22, 33)
     sourceObservable.pipe(
-        filter(item => item % 2),       // filters the data
+        filter(item => item % 2),       // filters the data, i.e odd numbers
         map(item => item + 1),          // transforms the data
         tap(console.log)                // taps every next call but not modify
     ).subscribe(observer)
