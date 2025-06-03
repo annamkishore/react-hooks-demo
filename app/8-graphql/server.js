@@ -1,11 +1,12 @@
+const path = require('path');
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 const {mergeTypeDefs} = require('@graphql-tools/merge');
 const {loadFilesSync} = require('@graphql-tools/load-files');
-const path = require('path');
+
 const resolvers = require('./graphql/user-post-resolvers');
 
-async function startApollo() {
+async function step1_startApollo() {
     // Load and merge type definitions from GraphQL files
     const typesArray = loadFilesSync(path.join(__dirname, './graphql'), {extensions: ['graphql']});
     const typeDefs = mergeTypeDefs(typesArray);
@@ -16,7 +17,7 @@ async function startApollo() {
     return server
 }
 
-async function startExpress(apolloServer) {
+async function step2_startExpress(apolloServer) {
     const app = express();
     apolloServer.applyMiddleware({app});
 
@@ -26,11 +27,13 @@ async function startExpress(apolloServer) {
     });
 }
 
+// ---------------main-----------------------
+
 async function main() {
     try {
 
-        let apollo = await startApollo()
-        await startExpress(apollo)
+        let apollo = await step1_startApollo()
+        await step2_startExpress(apollo)
     } catch (error) {
         console.error('Error starting Apollo Server:', error);
     }

@@ -12,3 +12,11 @@ Session Agenda
 10. fragments
 11. directives
 12. 
+
+how to run:
+1. run server.js
+2. open
+   http://localhost:4000/graphql
+   (or)
+   https://studio.apollographql.com/sandbox/explorer?endpoint=http://localhost:4000/graphql
+3. play with studio (client) 
