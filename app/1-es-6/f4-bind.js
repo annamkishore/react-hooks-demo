@@ -2,10 +2,10 @@ console.log("Bind Demo")
 
 /**
  *  build-in methods: bind, call, apply
- *  These built in methods, that exist on every JS function can be very useful.
- *      function.bind(object)
- *      call.bind(object)
- *      apply.bind(object)
+ *  built in methods exist on every JS function
+ *      function.bind(object)()
+ *      function.call(object)
+ *      function.apply(object)
  */
 
 // ----------------------------empty args------------------------

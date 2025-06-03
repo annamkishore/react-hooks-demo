@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+// Step #1 (create slice)
 export const shopSlice = createSlice({
     name: 'shop',
     initialState: {

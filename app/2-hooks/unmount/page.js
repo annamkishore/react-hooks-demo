@@ -2,17 +2,36 @@
 
 import {useEffect, useState} from "react";
 
-let count=0
 function LifecycleDemo() {
+  let [count, setCount] = useState(0);
+  let [msg, setMsg] = useState("Hello");
 
-  useEffect(() => {
-    // This gets called after every render
-    console.log("render!");
-
-    return () => console.log("unmounting...");
+  // Render always
+  useEffect(()   => {
+    console.log("Krishna, render always");
+    return () => console.log("Krishna, unmount ONE");
   });
 
-  return `I'm a lifecycle demo${count++}`;
+  // Render on Mount
+  useEffect(() => {
+    console.log("Krishna, render on mount");
+    setMsg(msg + "\nKrishna, render on mount");
+    return () => console.log("Krishna, unmount TWO");
+  }, []);
+
+  // Render on count change
+  useEffect(() => {
+    setMsg(msg + "\nKrishna, render on count change");
+    return () => console.log("Krishna, unmount THREE");
+  }, [count]);
+
+  return (
+    <>
+      LifecycleDemo: {count}
+      <button onClick={() => setCount(count + 1)}>Count</button>
+      <div>{msg}</div>
+    </>
+  );
 }
 
 export default function App() {

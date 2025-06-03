@@ -16,6 +16,7 @@ export default function App() {
 }
 
 function Hello() {
+    // final, Step 4 (useSelector to use value, i.e state)
     let count = useSelector(state => state.counter) // counter name from createSlice(name)
     let shop = useSelector(state => state.shop) // counter name from createSlice(name)
     let dispatch = useDispatch()
