@@ -6,7 +6,7 @@ function sumOf(arr) {
 }
 
 // feature(es6): raw strings, means unprocessed strings---------------------
-let a = String.raw`hello\nworld`
-let b = `hello\nworld`
+let a = String.raw`hello\nworld`  // length 12
+let b = `hello\nworld`                   // length 11
 // here a, b are different
 console.log(a, b)

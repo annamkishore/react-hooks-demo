@@ -1,11 +1,11 @@
-console.log("Bind Demo")
+console.log("Apply, Bind, Call Demo")
 
 /**
  *  build-in methods: bind, call, apply
  *  built in methods exist on every JS function
+ *      function.apply(object)
  *      function.bind(object)()
  *      function.call(object)
- *      function.apply(object)
  */
 
 // ----------------------------empty args------------------------
@@ -19,9 +19,9 @@ let emp = {
     id: 1234
 }
 
-printName.bind(emp)()
-printName.call(emp)
 printName.apply(emp)
+printName.bind(emp)()   // need to call explicitly
+printName.call(emp)
 
 // ----------------------------2 args----------------------------
 
@@ -32,6 +32,6 @@ function printNameNContacts(contact1, contact2) {
     )
 }
 
+printNameNContacts.apply(emp, [11, 22])     // apply, call -- diff is args-in-array vs separate-args
 printNameNContacts.bind(emp)(11, 22)
 printNameNContacts.call(emp, 11, 22)
-printNameNContacts.apply(emp, [11, 22])

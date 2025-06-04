@@ -42,16 +42,14 @@ const {name, age} = person;
 console.log(name); // John
 console.log(age);  // 30
 
-// Array Destructure--------------------------
 function printPerson({name, age}) {
     console.log(`${name} is ${age} years old.`);
 }
-
-const person1 = {name: 'John', age: 30};
-printPerson(person1);
+printPerson(person);
 // Output: John is 30 years old.
 
 // -------------------Rest params--------------------------
+// only one rest param is allowed, must be in the last
 let showProducts = function (id, ...products) {
     console.log(id);
     console.log(products);

@@ -1,5 +1,8 @@
 
 // no client based hooks means, this is a SSR page
+export const metadata = {
+  title: "Next.js"
+}
 
 export default async function Hello({ params, searchParams }) {
   let paramsJson = await params

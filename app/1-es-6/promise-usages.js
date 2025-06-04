@@ -1,6 +1,10 @@
 
 console.log("--------Promise usages--------")
 
+//--------------------------------------
+// thumb rule, Promise is like an assignment statement, which starts executing..
+//--------------------------------------
+
 // 1 - simple
 let p1 = Promise.resolve("1. 10")
 p1.then(console.log)
