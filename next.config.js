@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // feature #1(next): using app directory
-    appDir: true,
-  },
   async redirects() {
     return [
       {

@@ -20,7 +20,7 @@ if(isMainThread) {
   const worker2 = new Worker(__filename)
   console.log("main end")
 }else {
-  console.log("worker start")
+  console.log("worker start", new Date())
   console.log(computeHeavy())
-  console.log("worker end")
+  console.log("worker end", new Date())
 }
