@@ -1,34 +1,39 @@
-'use client';
+import {Suspense} from "react";
+import dynamic from "next/dynamic";
 
-import {Suspense, lazy} from "react";
+import LazyData from "./LazyData";
 
-const LazyHello = lazy(() => import("./hello"));
+const LazyHelloComponent = dynamic(
+  () => import("./LazyHelloComp"),
+  {
+    ssr: false,
+    loading: () => <>Loading Component..</>
+  }
+);
 
+// demo for below
 // async data
 // async code
-
-async function UserData() {
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-  await delay(1000); // simulate 1 second network/data delay
-  return <div>👤 User</div>;
-}
 
 export default function SuspensePage() {
   return (
     <>
       <div>Suspense Demo</div>
-      {/* Async Data (or) Data Fetching */}
-      <Suspense fallback={<p>Loading User Data...</p>}>
+
+      {/* Server-rendered async data */}
+      <Suspense fallback={<p>Loading User Data... (wait 1 sec)</p>}>
         Async Data
-        <UserData />
+        <LazyData/>
       </Suspense>
 
-      {/* Async Code (or) Code Splitting */}
-      <Suspense fallback={<>Loading...</>}>
-        Async Code
-        <LazyHello />
-      </Suspense>
+      {/* Client-rendered, code-split component */}
+      <LazyHelloComponent />
+
+      {/* Async Code (or) Code Splitting, needed if react lazy  */}
+      {/*<Suspense fallback={<>Loading React Component...(wait 2 secs)</>}>*/}
+      {/*  Async Code..*/}
+      {/*  <LazyHelloComponent/>*/}
+      {/*</Suspense>*/}
     </>
   )
 }
