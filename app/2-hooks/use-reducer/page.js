@@ -2,11 +2,16 @@
 
 import {useReducer} from "react";
 
+const Actions = {
+  INCREMENT: "INCREMENT",
+  DECREMENT: "DECREMENT",
+}
+
 function reducer(state, action) {
   switch (action) {
-    case "INCREMENT":
+    case Actions.INCREMENT:
       return state + 1;
-    case "DECREMENT":
+    case Actions.DECREMENT:
       return state - 1;
     default:
       return state;
@@ -19,9 +24,9 @@ export default function UseReducerDemo() {
   return <>
     <h1>
       Use Reducer Demo <br />
-      <button onClick={()=>dispatch("INCREMENT")}>Add</button>
+      <button onClick={()=>dispatch(Actions.INCREMENT)}>Add</button>
       Value: {state}
-      <button onClick={()=>dispatch("DECREMENT")}>Subtract</button>
+      <button onClick={()=>dispatch(Actions.DECREMENT)}>Subtract</button>
     </h1>
   </>
 }

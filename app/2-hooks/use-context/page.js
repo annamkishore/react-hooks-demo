@@ -10,6 +10,12 @@ export default function UseContextDemo() {
 
 // ----------------Private/Local/Unexported Components---------------------
 
+/**
+ * createContext --- let UserContext = createContext()
+ * provider ---      <UserContext.Provider value={user}>
+ * consumer ---      let userObj = useContext(UserContext)
+ */
+
 // feature #4(--react): useContext, reducing props passing into child components
 // step 1
 let UserContext = createContext()
